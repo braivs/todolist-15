@@ -75,14 +75,11 @@ export const removeTodolistTC = (todolistId: string) => {
                     dispatch(setAppStatusAC('succeeded'))
                 } else {
                     handleServerAppError(dispatch, res.data)
-                    // if (res.data.messages.length) {
-                    //     dispatch(setAppErrorAC(res.data.messages[0]))
-                    // } else {
-                    //     dispatch(setAppErrorAC('Some error occurred'))
-                    // }
-                    // dispatch(setAppStatusAC('failed'))
                 }
-
+            })
+            .catch((err: AxiosError) => {
+                handleServerNetworkError(dispatch, err.message)
+                dispatch(changeTodolistEntityStatusAC(todolistId,'idle'))
             })
     }
 }
@@ -115,6 +112,9 @@ export const changeTodolistTitleTC = (id: string, title: string) => {
             .then((res) => {
                 dispatch(setAppStatusAC('succeeded'))
                 dispatch(changeTodolistTitleAC(id, title))
+            })
+            .catch((err: AxiosError) => {
+                handleServerNetworkError(dispatch, err.message)
             })
     }
 }

@@ -69,6 +69,9 @@ export const removeTaskTC = (taskId: string, todolistId: string) => (dispatch: D
             const action = removeTaskAC(taskId, todolistId)
             dispatch(action)
         })
+        .catch((err: AxiosError) => {
+            handleServerNetworkError(dispatch, err.message)
+        })
 }
 
 enum ResponseEnum {
@@ -86,12 +89,6 @@ export const addTaskTC = (title: string, todolistId: string) => (dispatch: Dispa
                 dispatch(addTaskAC(res.data.data.item))
             } else {
                 handleServerAppError<{item: TaskType}>(dispatch, res.data)
-                // if (res.data.messages.length) {
-                //     dispatch(setAppErrorAC(res.data.messages[0]))
-                // } else {
-                //     dispatch(setAppErrorAC('Some error occurred'))
-                // }
-                // dispatch(setAppStatusAC('failed'))
             }
         })
         .catch((err: AxiosError) => {
@@ -126,6 +123,9 @@ export const updateTaskTC = (taskId: string, domainModel: UpdateDomainTaskModelT
                 dispatch(setAppStatusAC('succeeded'))
                 const action = updateTaskAC(taskId, domainModel, todolistId)
                 dispatch(action)
+            })
+            .catch((err: AxiosError) => {
+                handleServerNetworkError(dispatch, err.message)
             })
     }
 
